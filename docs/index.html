@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TRPG Assistant — CoC 7e Dice Probability Tool</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="container">
+
+    <!-- Header -->
+    <div class="header">
+        <h1>&#127922; TRPG Assistant</h1>
+        <div class="subtitle">Expected Value Calculator for Call of Cthulhu 7th Edition</div>
+        <div class="subtitle">Fully coded by LLM — exact probability math, no random simulation.</div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="tabs">
+        <button class="tab-btn active" data-tab="ev">Expected Value</button>
+        <button class="tab-btn" data-tab="coc-ref">CoC 7e Reference</button>
+        <button class="tab-btn" data-tab="roll-buy">Roll vs Point-Buy</button>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- Tab 1: Expected Value Calculator            -->
+    <!-- ========================================== -->
+    <div class="tab-panel active" id="tab-ev">
+        <div class="section-header">Expected Value Calculator</div>
+        <div class="section-desc">Enter a dice notation to see the expected percentile value (&times;5).</div>
+
+        <div class="btn-row">
+            <input type="text" id="ev-input" placeholder="e.g. 3d6, 2d6+6, 5d6, 1d20, 4d4-2" style="flex:1;">
+            <button class="btn" id="ev-calc-btn">Calculate</button>
+        </div>
+
+        <div id="ev-error" class="error-display"></div>
+        <div id="ev-result"></div>
+
+        <div id="ev-info" class="info-box">
+            Enter a dice notation above and click <strong>Calculate</strong>.
+            <table>
+                <tr><th>Notation</th><th>Expected (&times;5)</th></tr>
+                <tr><td><code>3d6</code></td><td>52.5</td></tr>
+                <tr><td><code>2d6+6</code></td><td>65.0</td></tr>
+                <tr><td><code>5d6</code></td><td>87.5</td></tr>
+                <tr><td><code>1d20</code></td><td>52.5</td></tr>
+                <tr><td><code>4d4-2</code></td><td>40.0</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- Tab 2: CoC 7e Character Reference          -->
+    <!-- ========================================== -->
+    <div class="tab-panel" id="tab-coc-ref">
+        <div class="section-header">CoC 7e Character Creation Reference</div>
+
+        <div class="result-cards">
+            <div class="card">
+                <div class="card-label">Total Expected (&times;5)</div>
+                <div class="card-value accent" id="coc-total">—</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Average per Attribute</div>
+                <div class="card-value" id="coc-avg">—</div>
+            </div>
+            <div class="card">
+                <div class="card-label">Attributes</div>
+                <div class="card-value" id="coc-count">—</div>
+            </div>
+        </div>
+
+        <hr class="divider">
+
+        <h3>Expected Values by Attribute</h3>
+        <div class="bar-chart" id="coc-chart"></div>
+
+        <h3>Attribute Details</h3>
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>Attribute</th>
+                    <th>Formula</th>
+                    <th>Expected (&times;5)</th>
+                    <th>Full Name</th>
+                </tr>
+            </thead>
+            <tbody id="coc-tbody"></tbody>
+        </table>
+
+        <div class="breakdown">
+            <div class="breakdown-title">What do these formulas mean?</div>
+            <p>In Call of Cthulhu 7th Edition, characteristics are rolled using specific dice formulas:</p>
+            <ul style="padding-left:20px; margin:8px 0;">
+                <li><strong>3d6 &times; 5</strong> — Used for STR, CON, DEX, POW, APP. Average is 52.5.</li>
+                <li><strong>2d6+6 &times; 5</strong> — Used for SIZ, INT, EDU. Average is 65.0.</li>
+            </ul>
+            <p>The <strong>&times;5</strong> multiplier converts raw 3&ndash;18 scores into the 15&ndash;90 percentile scale used in CoC 7e.</p>
+        </div>
+    </div>
+
+    <!-- ========================================== -->
+    <!-- Tab 3: Roll vs Point-Buy Comparison        -->
+    <!-- ========================================== -->
+    <div class="tab-panel" id="tab-roll-buy">
+        <div class="section-header">Roll vs Point-Buy Comparison</div>
+        <div class="section-desc">
+            Compare rolling dice (with multiple attempts) against a point-buy budget.
+            Helps answer: <em>Is it better to roll X times and pick the best, or just take X points?</em>
+        </div>
+
+        <div class="cols-2">
+            <div>
+                <div class="form-group">
+                    <label for="rb-budget">Point-buy budget</label>
+                    <input type="number" id="rb-budget" value="450" min="0" max="1000" step="5">
+                </div>
+                <div class="form-group">
+                    <label for="rb-attempts">Number of attempts (X)</label>
+                    <input type="number" id="rb-attempts" value="3" min="1" max="50" step="1">
+                </div>
+            </div>
+            <div>
+                <label style="font-size:0.85rem; color:var(--text-muted); display:block; margin-bottom:6px;">Comparison mode</label>
+                <div class="radio-group">
+                    <label class="radio-option">
+                        <input type="radio" name="rb-mode" value="full_set" checked>
+                        <div>
+                            <div class="radio-label">Best of K Full Sets (Mode A)</div>
+                            <div class="radio-desc">Roll complete sets, pick the best by total sum.</div>
+                        </div>
+                    </label>
+                    <label class="radio-option">
+                        <input type="radio" name="rb-mode" value="per_group">
+                        <div>
+                            <div class="radio-label">Best per Formula Group (Mode B)</div>
+                            <div class="radio-desc">Pool all 3d6 rolls together (pick best 5) and all 2d6+6 rolls together (pick best 3). Gives more selection freedom.</div>
+                        </div>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn" id="rb-compare-btn" style="width:100%; margin-top:8px;">Compare</button>
+
+        <div id="rb-error" class="error-display"></div>
+        <div id="rb-result"></div>
+    </div>
+
+    <!-- About footer -->
+    <div class="about-section">
+        This tool analyzes dice probabilities for CoC 7e character creation using <strong>exact probability math</strong> — no random number generation.
+        &nbsp;|&nbsp;
+        <a href="https://github.com/OMGGGGGds-cloud/COC_TRPG_ROLE_CREATETOOL" target="_blank" rel="noopener">GitHub</a>
+    </div>
+
+</div>
+
+<!-- JS modules (order matters) -->
+<script src="js/parser.js"></script>
+<script src="js/calculator.js"></script>
+<script src="js/coc_data.js"></script>
+<script src="js/distribution.js"></script>
+<script src="js/comparator.js"></script>
+<script src="js/app.js"></script>
+
+</body>
+</html>
