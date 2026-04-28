@@ -1,7 +1,7 @@
 # TRPG Assistant — Expected Value Calculator
 
 A Python tool for analyzing dice probabilities in Call of Cthulhu 7th Edition. Provides exact theoretical expected values using probability math — no random simulation.
-It is fully coded by LLM.
+
 ## Features
 
 ### 1. Expected Value Calculator
@@ -49,8 +49,35 @@ All calculations use **exact order statistics** on full probability distribution
 ## Installation
 
 1. Ensure Python 3.8+ is installed.
-2. No external dependencies required (standard library only).
-3. Run: `python main.py`
+2. Install the package:
+   ```bash
+   pip install trpg-assistant
+   ```
+3. Run the CLI or web UI (see below).
+
+### CLI Mode
+```bash
+python main.py
+# or
+trpg
+```
+
+### Web UI (Streamlit)
+```bash
+# Launch from source
+streamlit run streamlit_app.py
+
+# Launch via console script (after pip install)
+trpg-web
+```
+
+The Streamlit web UI provides a browser-based interface with visual charts and metric cards. Same exact probability math, friendlier UI.
+
+| Feature | CLI | Web UI |
+|---------|-----|--------|
+| Expected Value | Text input | Text input + metric cards |
+| CoC Reference | Plain table | Table + bar chart + metrics |
+| Roll vs Buy | Text prompts | Sliders, radio buttons, color-coded results |
 
 ## Usage
 
@@ -122,7 +149,8 @@ python -m pytest tests/test_dice_calc.py -v
 
 ```
 TRPG/
-├── main.py                    # Entry point
+├── main.py                    # Entry point (CLI)
+├── streamlit_app.py           # Entry point (Streamlit web UI)
 ├── dice_calc/
 │   ├── __init__.py            # Package init
 │   ├── parser.py              # Dice notation parser
@@ -130,7 +158,8 @@ TRPG/
 │   ├── distribution.py        # Probability distributions & order statistics
 │   ├── coc_data.py            # CoC 7e characteristic definitions
 │   ├── comparator.py          # Roll vs point-buy comparison (Mode A & B)
-│   └── cli.py                 # CLI interface
+│   ├── cli.py                 # CLI interface
+│   └── streamlit_ui.py        # Streamlit web UI
 ├── tests/
 │   └── test_dice_calc.py      # Unit tests
 └── README.md                  # This file

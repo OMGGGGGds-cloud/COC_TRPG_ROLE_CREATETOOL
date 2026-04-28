@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=64", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "trpg-assistant"
+version = "1.0.0"
+description = "TRPG dice probability calculator for Call of Cthulhu 7e"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.8"
+dependencies = [
+    "streamlit>=1.28",
+    "pandas",
+]
+authors = [
+    { name = "OMGGGGGds-cloud", email = "your.email@example.com" },
+]
+keywords = ["trpg", "call-of-cthulhu", "dice", "probability", "coc", "streamlit"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Games/Entertainment :: Role-Playing",
+    "Topic :: Scientific/Engineering :: Mathematics",
+]
+
+[project.urls]
+Homepage = "https://github.com/OMGGGGGds-cloud/COC_TRPG_ROLE_CREATETOOL"
+Repository = "https://github.com/OMGGGGGds-cloud/COC_TRPG_ROLE_CREATETOOL.git"
+
+[project.scripts]
+trpg = "dice_calc.cli:run_cli"
+trpg-web = "dice_calc.streamlit_ui:run_web"
+
+[tool.setuptools.packages.find]
+include = ["dice_calc*"]
