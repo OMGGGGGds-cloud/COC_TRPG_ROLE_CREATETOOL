@@ -46,15 +46,6 @@ This gives more selection freedom than Mode A, since you independently optimize 
 
 All calculations use **exact order statistics** on full probability distributions — no random simulation.
 
-## Installation
-
-1. Ensure Python 3.8+ is installed.
-2. Install the package:
-   ```bash
-   pip install trpg-assistant
-   ```
-3. Run the CLI or web UI (see below).
-
 ### CLI Mode
 ```bash
 python main.py
