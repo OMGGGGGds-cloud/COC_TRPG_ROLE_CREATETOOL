@@ -1,6 +1,7 @@
 # TRPG Assistant — Expected Value Calculator
 
 A Python tool for analyzing dice probabilities in Call of Cthulhu 7th Edition. Provides exact theoretical expected values using probability math — no random simulation.
+You may try it on: https://omgggggds-cloud.github.io/COC_TRPG_ROLE_CREATETOOL/
 
 ## Features
 
