@@ -57,20 +57,17 @@ function renderExpectedValue() {
         var html = '<div class="result-cards">';
 
         html += '<div class="card"><div class="card-label">Formula</div><div class="card-value">' + expr.notation() + '</div></div>';
-        html += '<div class="card"><div class="card-label">Expected Value (&times;5)</div><div class="card-value accent">' + fmt(total) + '</div></div>';
-        html += '<div class="card"><div class="card-label">Raw Score</div><div class="card-value">' + fmt(rawExpected) + '</div></div>';
+        html += '<div class="card"><div class="card-label">Expected Value</div><div class="card-value accent">' + fmt(rawExpected) + '</div></div>';
 
         html += '</div>';
 
         html += '<div class="breakdown">';
         html += '<div class="breakdown-title">Breakdown</div>';
-        html += '<div>Per-die raw expected: <strong>' + fmt(perDie) + '</strong></div>';
-        html += '<div>Per-die percentile (&times;5): <strong>' + fmt(perDie * 5) + '</strong></div>';
+        html += '<div>Per-die expected: <strong>' + fmt(perDie) + '</strong></div>';
         html += '<div>Dice count: <strong>' + expr.count + '</strong></div>';
         if (expr.modifier) {
-            var scaled = expr.modifier * 5;
-            var sign = scaled > 0 ? "+" : "";
-            html += '<div>Flat modifier: <strong>' + sign + expr.modifier + '</strong> (&times;5 = ' + sign + scaled + ')</div>';
+            var sign = expr.modifier > 0 ? "+" : "";
+            html += '<div>Flat modifier: <strong>' + sign + expr.modifier + '</strong></div>';
         }
         html += '</div>';
 
