@@ -5,13 +5,17 @@ Uses the formula: E[NdX+Y] = N * (X + 1) / 2 + Y
 
 from dice_calc.parser import DiceExpression, parse_notation
 
+# CoC 7e converts raw 3-18 scores to a 15-90 percentile scale by multiplying by 5
+COC_PERCENTILE_MULTIPLIER: int = 5
+
 
 def expected_value(expr: DiceExpression) -> float:
-    """Calculate the expected value of a dice expression, multiplied by 5
-    to convert CoC 7e raw characteristic scores to percentile values.
+    """Calculate the expected value of a dice expression, multiplied by
+    COC_PERCENTILE_MULTIPLIER to convert CoC 7e raw characteristic scores
+    to percentile values.
 
     Formula: E[NdX+Y] = N * (X + 1) / 2 + Y   (raw score)
-             Percentile = raw × 5
+             Percentile = raw × COC_PERCENTILE_MULTIPLIER
 
     For example:
         - 3d6 → 3 * (6 + 1) / 2 * 5 = 52.5
@@ -26,7 +30,7 @@ def expected_value(expr: DiceExpression) -> float:
     """
     per_die = (expr.sides + 1) / 2.0
     raw = expr.count * per_die + expr.modifier
-    return raw * 5
+    return raw * COC_PERCENTILE_MULTIPLIER
 
 
 def expected_value_str(notation: str) -> str:
@@ -42,22 +46,22 @@ def expected_value_str(notation: str) -> str:
     total = expected_value(expr)
     per_die = (expr.sides + 1) / 2.0
 
-    raw_per_die = per_die
-    percentile_per_die = raw_per_die * 5
+    percentile_per_die = per_die * COC_PERCENTILE_MULTIPLIER
+    mult_label = f"(×{COC_PERCENTILE_MULTIPLIER})"
 
     parts = [f"Formula: {expr.notation}"]
     parts.append(f"Expected percentile value: {total:g}")
 
     detail_parts = []
     if percentile_per_die.is_integer():
-        detail_parts.append(f"{int(percentile_per_die)} per die (×5)")
+        detail_parts.append(f"{int(percentile_per_die)} per die {mult_label}")
     else:
-        detail_parts.append(f"{percentile_per_die:g} per die (×5)")
+        detail_parts.append(f"{percentile_per_die:g} per die {mult_label}")
     label = "die" if expr.count == 1 else "dice"
     detail_parts.append(f"× {expr.count} {label}")
     if expr.modifier:
-        scaled_mod = expr.modifier * 5
-        detail_parts.append(f"{'+' if scaled_mod > 0 else ''}{scaled_mod} flat (×5)")
+        scaled_mod = expr.modifier * COC_PERCENTILE_MULTIPLIER
+        detail_parts.append(f"{'+' if scaled_mod > 0 else ''}{scaled_mod} flat {mult_label}")
     parts.append(f"  ({', '.join(detail_parts)})")
 
     return "\n".join(parts)

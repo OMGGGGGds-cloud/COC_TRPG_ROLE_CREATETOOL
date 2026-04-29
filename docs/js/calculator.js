@@ -1,5 +1,8 @@
 /* Expected value calculator for dice expressions. */
 (function(TRPG) {
+"use strict";
+
+var COC_PERCENTILE_MULTIPLIER = 5;
 
 TRPG.expectedValue = function(expr) {
     return expr.percentileExpected();
@@ -9,7 +12,8 @@ TRPG.expectedValueStr = function(notation) {
     var expr = TRPG.parse(notation);
     var total = TRPG.expectedValue(expr);
     var perDie = (expr.sides + 1) / 2;
-    var percentilePerDie = perDie * 5;
+    var percentilePerDie = perDie * COC_PERCENTILE_MULTIPLIER;
+    var multLabel = "(×" + COC_PERCENTILE_MULTIPLIER + ")";
 
     var parts = [];
     parts.push("Formula: " + expr.notation());
@@ -17,16 +21,16 @@ TRPG.expectedValueStr = function(notation) {
 
     var detail = [];
     if (Number.isInteger(percentilePerDie)) {
-        detail.push(percentilePerDie + " per die (×5)");
+        detail.push(percentilePerDie + " per die " + multLabel);
     } else {
-        detail.push(formatFloat(percentilePerDie) + " per die (×5)");
+        detail.push(formatFloat(percentilePerDie) + " per die " + multLabel);
     }
     var label = expr.count === 1 ? "die" : "dice";
     detail.push("× " + expr.count + " " + label);
     if (expr.modifier) {
-        var scaled = expr.modifier * 5;
+        var scaled = expr.modifier * COC_PERCENTILE_MULTIPLIER;
         var sign = scaled > 0 ? "+" : "";
-        detail.push(sign + scaled + " flat (×5)");
+        detail.push(sign + scaled + " flat " + multLabel);
     }
     parts.push("  (" + detail.join(", ") + ")");
 

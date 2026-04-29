@@ -137,7 +137,7 @@ class TestExpectedValue:
     def test_expected_value_str_format(self):
         result = expected_value_str("3d6")
         assert "Expected percentile value: 52.5" in result
-        assert "3d6" in result or "3d6" in result
+        assert "3d6" in result
 
 
 # =============================================================================

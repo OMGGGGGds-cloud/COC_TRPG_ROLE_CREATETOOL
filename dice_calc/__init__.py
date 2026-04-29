@@ -1,7 +1,7 @@
 """Dice calculation tools for TRPG character creation analysis."""
 
 from dice_calc.parser import DiceExpression, parse_notation
-from dice_calc.calculator import expected_value, expected_value_str
+from dice_calc.calculator import expected_value, expected_value_str, COC_PERCENTILE_MULTIPLIER
 from dice_calc.distribution import dice_sum_distribution, expected_max_of_k
 from dice_calc.coc_data import COC_CHARACTERISTICS, CoCCharacteristic
 from dice_calc.comparator import ComparisonResult, compare_roll_vs_buy
@@ -12,6 +12,7 @@ __all__ = [
     "parse_notation",
     "expected_value",
     "expected_value_str",
+    "COC_PERCENTILE_MULTIPLIER",
     "dice_sum_distribution",
     "expected_max_of_k",
     "COC_CHARACTERISTICS",

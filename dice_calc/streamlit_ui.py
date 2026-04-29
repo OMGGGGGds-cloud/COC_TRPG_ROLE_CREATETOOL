@@ -1,7 +1,7 @@
 """Streamlit web UI for the TRPG Expected Value Calculator."""
 
 import streamlit as st
-from dice_calc.calculator import expected_value_str, expected_value
+from dice_calc.calculator import expected_value_str, expected_value, COC_PERCENTILE_MULTIPLIER
 from dice_calc.coc_data import COC_CHARACTERISTICS
 from dice_calc.comparator import compare_roll_vs_buy
 from dice_calc.parser import parse_notation
@@ -66,7 +66,7 @@ if page == "Expected Value":
 
             st.divider()
 
-            raw_expected = total / 5
+            raw_expected = total / COC_PERCENTILE_MULTIPLIER
 
             col_a, col_b = st.columns(2)
             with col_a:

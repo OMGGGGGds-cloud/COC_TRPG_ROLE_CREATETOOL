@@ -164,19 +164,23 @@ def run_cli() -> None:
     print("Welcome to the TRPG Expected Value Calculator!")
     print("This tool helps analyze dice probabilities for Call of Cthulhu 7e.")
 
-    while True:
-        _print_menu()
-        choice = input("Select option (1-4): ").strip()
+    try:
+        while True:
+            _print_menu()
+            choice = input("Select option (1-4): ").strip()
 
-        if choice == "1":
-            _option_expected_value()
-        elif choice == "2":
-            _option_coc_reference()
-        elif choice == "3":
-            _option_roll_vs_buy()
-        elif choice == "4":
-            print()
-            print("Goodbye!")
-            break
-        else:
-            print("  Invalid option. Please enter 1-4.")
+            if choice == "1":
+                _option_expected_value()
+            elif choice == "2":
+                _option_coc_reference()
+            elif choice == "3":
+                _option_roll_vs_buy()
+            elif choice == "4":
+                print()
+                print("Goodbye!")
+                break
+            else:
+                print("  Invalid option. Please enter 1-4.")
+    except KeyboardInterrupt:
+        print()
+        print("Goodbye!")

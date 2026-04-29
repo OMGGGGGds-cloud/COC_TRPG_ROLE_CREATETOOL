@@ -2,6 +2,9 @@
  * Mode A (full_set): Best of K complete sets.
  * Mode B (per_group): Best per formula group. */
 (function(TRPG) {
+"use strict";
+
+var COC_PERCENTILE_MULTIPLIER = 5;
 
 var ALL_CHARS = TRPG.COC_CHARACTERISTICS;
 var CHARS_3D6 = ALL_CHARS.filter(function(c) { return c.formula === "3d6"; });
@@ -64,7 +67,7 @@ function compareModeFullSet(budget, attempts) {
         singleExpected += rawExpectedFromFormula(ALL_CHARS[i].formula);
     }
 
-    var expectedBest = TRPG.expectedMaxOfK(setDist, attempts) * 5;
+    var expectedBest = TRPG.expectedMaxOfK(setDist, attempts) * COC_PERCENTILE_MULTIPLIER;
 
     return new TRPG.ComparisonResult({
         budget: budget,
@@ -84,8 +87,8 @@ function compareModePerGroup(budget, attempts) {
     var pool3d6 = COUNT_3D6 * attempts;
     var pool2d6 = COUNT_2D6 * attempts;
 
-    var expectedBest3d6 = TRPG.expectedSumOfTopK(dist3d6, pool3d6, COUNT_3D6) * 5;
-    var expectedBest2d6 = TRPG.expectedSumOfTopK(dist2d6, pool2d6, COUNT_2D6) * 5;
+    var expectedBest3d6 = TRPG.expectedSumOfTopK(dist3d6, pool3d6, COUNT_3D6) * COC_PERCENTILE_MULTIPLIER;
+    var expectedBest2d6 = TRPG.expectedSumOfTopK(dist2d6, pool2d6, COUNT_2D6) * COC_PERCENTILE_MULTIPLIER;
 
     var expectedBestTotal = expectedBest3d6 + expectedBest2d6;
 

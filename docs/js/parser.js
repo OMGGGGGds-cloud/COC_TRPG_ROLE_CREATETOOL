@@ -1,5 +1,6 @@
 /* Dice notation parser. Parses strings like "3d6", "2d6+6", "5d6", "4d4-2". */
 (function(TRPG) {
+"use strict";
 
 var DICE_PATTERN = /^(\d+)d(\d+)([+-]\d+)?$/i;
 
@@ -21,7 +22,7 @@ TRPG.DiceExpression.prototype.rawExpected = function() {
 };
 
 TRPG.DiceExpression.prototype.percentileExpected = function() {
-    return this.rawExpected() * 5;
+    return this.rawExpected() * 5;  // CoC 7e x5 percentile scale
 };
 
 TRPG.parse = function(notation) {

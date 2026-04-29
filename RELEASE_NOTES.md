@@ -78,9 +78,9 @@ Two comparison modes are available, both using exact order statistics:
   4. Exit
 - Entry point: [`main.py`](main.py) or `trpg` console script (registered in [`pyproject.toml`](pyproject.toml:33))
 
-### 7. PyInstaller Build Support
-- [`trpg-calc.spec`](trpg-calc.spec) with optimized exclusion of unused standard library modules (GUI frameworks, async, email, multimedia, compression, etc.)
-- Builds a single `trpg-calc.exe` console binary
+### 7. Interactive Web UI (Streamlit)
+- Browser-based interface via `streamlit run streamlit_app.py` or the `trpg-web` console script
+- Three pages: Expected Value, CoC 7e Reference, and Roll vs Point-Buy Comparison
 
 ---
 

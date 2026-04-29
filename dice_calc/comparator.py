@@ -15,7 +15,7 @@ from dataclasses import dataclass, field
 from typing import Dict, List, Optional
 
 from dice_calc.parser import parse_notation
-from dice_calc.calculator import expected_value
+from dice_calc.calculator import expected_value, COC_PERCENTILE_MULTIPLIER
 from dice_calc.distribution import (
     dice_sum_distribution_with_modifier,
     expected_max_of_k,
@@ -33,6 +33,11 @@ _2D6_CHARACTERISTICS: List[CoCCharacteristic] = [
 ]
 COUNT_3D6: int = len(_3D6_CHARACTERISTICS)    # 5
 COUNT_2D6: int = len(_2D6_CHARACTERISTICS)    # 3
+
+# Precomputed expected total for a single 8-attribute set (percentile scale)
+_SINGLE_SET_EXPECTED: float = sum(
+    expected_value(parse_notation(c.formula)) for c in COC_CHARACTERISTICS
+)
 
 
 @dataclass
@@ -106,7 +111,7 @@ def _build_attribute_distribution(char: CoCCharacteristic) -> Dict[int, float]:
 def _expected_value_from_formula(formula: str) -> float:
     """Get the expected value from a dice formula string.
 
-    Returns the raw expected characteristic score (not percentile).
+    Returns the expected characteristic score in percentile scale (×5).
     """
     expr = parse_notation(formula)
     return expected_value(expr)
@@ -133,22 +138,16 @@ def compare_mode_full_set(
     # Convolve all 8 into the total set distribution
     set_dist = convolve_distributions(attr_dists)
 
-    # Expected total of a single set
-    single_expected = sum(
-        _expected_value_from_formula(char.formula) for char in COC_CHARACTERISTICS
-    )
+    # Expected max over K sets (multiply for percentile scale)
+    expected_best = expected_max_of_k(set_dist, attempts) * COC_PERCENTILE_MULTIPLIER
 
-    # Expected max over K sets (multiply by 5 for percentile scale)
-    expected_best = expected_max_of_k(set_dist, attempts) * 5
-
-    # single_expected comes from expected_value() which already returns ×5
     return ComparisonResult(
         point_buy_budget=budget,
         attempts=attempts,
         mode="full_set",
         expected_best_total=expected_best,
         point_buy_total=budget,
-        single_set_expected=single_expected,
+        single_set_expected=_SINGLE_SET_EXPECTED,
         set_distribution=set_dist,
     )
 
@@ -172,19 +171,6 @@ def _build_single_group_distribution(
     # All chars in a group share the same formula (by construction)
     return _build_attribute_distribution(chars[0])
 
-
-def _expected_value_group(chars: List[CoCCharacteristic]) -> float:
-    """Expected value (raw) for a single roll from a group.
-
-    Args:
-        chars: List of characteristics sharing the same formula.
-
-    Returns:
-        Expected value of one characteristic's raw roll.
-    """
-    if not chars:
-        return 0.0
-    return _expected_value_from_formula(chars[0].formula)
 
 
 def compare_mode_per_group(
@@ -216,18 +202,13 @@ def compare_mode_per_group(
     pool_3d6 = COUNT_3D6 * attempts   # 5 × K
     pool_2d6 = COUNT_2D6 * attempts   # 3 × K
 
-    # Expected sum of best 5 out of 5K 3d6 rolls (multiply by 5 for percentile scale)
-    expected_best_3d6 = expected_sum_of_top_k(dist_3d6, pool_3d6, COUNT_3D6) * 5
+    # Expected sum of best 5 out of 5K 3d6 rolls (multiply for percentile scale)
+    expected_best_3d6 = expected_sum_of_top_k(dist_3d6, pool_3d6, COUNT_3D6) * COC_PERCENTILE_MULTIPLIER
 
-    # Expected sum of best 3 out of 3K 2d6+6 rolls (multiply by 5 for percentile scale)
-    expected_best_2d6 = expected_sum_of_top_k(dist_2d6, pool_2d6, COUNT_2D6) * 5
+    # Expected sum of best 3 out of 3K 2d6+6 rolls (multiply for percentile scale)
+    expected_best_2d6 = expected_sum_of_top_k(dist_2d6, pool_2d6, COUNT_2D6) * COC_PERCENTILE_MULTIPLIER
 
     expected_best_total = expected_best_3d6 + expected_best_2d6
-
-    # Single-set expected total (for reference)
-    single_expected = sum(
-        _expected_value_from_formula(char.formula) for char in COC_CHARACTERISTICS
-    )
 
     return ComparisonResult(
         point_buy_budget=budget,
@@ -235,14 +216,12 @@ def compare_mode_per_group(
         mode="per_group",
         expected_best_total=expected_best_total,
         point_buy_total=budget,
-        single_set_expected=single_expected,
+        single_set_expected=_SINGLE_SET_EXPECTED,
         group_3d6_expected_best=expected_best_3d6,
         group_2d6_expected_best=expected_best_2d6,
         group_3d6_pool_size=pool_3d6,
         group_2d6_pool_size=pool_2d6,
     )
-
-
 
 
 

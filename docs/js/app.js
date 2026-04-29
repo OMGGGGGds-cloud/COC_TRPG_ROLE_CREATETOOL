@@ -1,5 +1,6 @@
 /* Main application logic — DOM wiring, tab switching, event handlers. */
 (function() {
+"use strict";
 
 var TRPG = window.TRPG;
 
@@ -93,7 +94,7 @@ function renderCoCReference() {
     var expectedVals = [];
     var fullNames = [];
 
-    for (var i = 0; i < chars.length; i++) {
+    for (let i = 0; i < chars.length; i++) {
         names.push(chars[i].name);
         formulas.push(chars[i].formula);
         var ev = TRPG.expectedValue(TRPG.parse(chars[i].formula));
@@ -112,7 +113,7 @@ function renderCoCReference() {
     // Bar chart
     var maxEv = Math.max.apply(null, expectedVals);
     var chartHtml = "";
-    for (var j = 0; j < expectedVals.length; j++) {
+    for (let j = 0; j < expectedVals.length; j++) {
         var pct = (expectedVals[j] / maxEv) * 100;
         var barClass = formulas[j] === "3d6" ? "bar-3d6" : "bar-2d6";
         chartHtml += '<div class="bar-row">';
@@ -126,7 +127,7 @@ function renderCoCReference() {
     // Table
     var tbody = document.getElementById("coc-tbody");
     tbody.innerHTML = "";
-    for (var k = 0; k < names.length; k++) {
+    for (let k = 0; k < names.length; k++) {
         var rowClass = formulas[k] === "2d6+6" ? "row-2d6" : "";
         tbody.innerHTML += '<tr class="' + rowClass + '">' +
             '<td>' + names[k] + '</td>' +

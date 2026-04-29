@@ -1,4 +1,5 @@
 /* Node.js test runner for TRPG JS modules. Run with: node docs/js/test.js */
+"use strict";
 
 var fs = require('fs');
 var vm = require('vm');

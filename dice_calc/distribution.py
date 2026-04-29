@@ -8,10 +8,12 @@ expected sum of the top K out of N draws.
 No random number generation is used — all results are exact probabilities.
 """
 
+import functools
 import math
 from typing import Dict
 
 
+@functools.lru_cache(maxsize=128)
 def dice_sum_distribution(count: int, sides: int) -> Dict[int, float]:
     """Compute the exact probability distribution for the sum of NdX.
 
@@ -109,7 +111,7 @@ def expected_max_of_k(dist: Dict[int, float], k: int) -> float:
     expected = 0.0
     prev_cdf = 0.0
     for x in sorted_vals:
-        p_max_eq_x = max_cdf[x] - prev_cdf
+        p_max_eq_x = max(0.0, max_cdf[x] - prev_cdf)
         expected += x * p_max_eq_x
         prev_cdf = max_cdf[x]
 

@@ -1,6 +1,7 @@
 /* Probability distributions for sums of dice and order statistics.
  * All calculations use exact probability math — no random simulation. */
 (function(TRPG) {
+"use strict";
 
 // ---- Binomial coefficient ----
 
