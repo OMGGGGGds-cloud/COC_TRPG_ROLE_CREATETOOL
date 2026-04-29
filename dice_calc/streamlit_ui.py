@@ -46,7 +46,7 @@ with st.sidebar:
 # =====================================================================
 if page == "Expected Value":
     st.header("Expected Value Calculator")
-    st.markdown("Enter a dice notation to see the expected percentile value (×5).")
+    st.markdown("Enter a dice notation to see the expected value.")
 
     col1, col2 = st.columns([3, 1])
     with col1:
@@ -66,23 +66,20 @@ if page == "Expected Value":
 
             st.divider()
 
-            col_a, col_b, col_c = st.columns(3)
+            raw_expected = total / 5
+
+            col_a, col_b = st.columns(2)
             with col_a:
                 st.metric("Formula", expr.notation)
             with col_b:
-                st.metric("Expected Value (×5)", f"{total:g}")
-            with col_c:
-                raw_expected = total / 5
-                st.metric("Raw Score", f"{raw_expected:g}")
+                st.metric("Expected Value", f"{raw_expected:g}")
 
             with st.expander("Breakdown", expanded=True):
                 per_die = (expr.sides + 1) / 2.0
-                st.markdown(f"- **Per-die raw expected:** {(per_die):g}")
-                st.markdown(f"- **Per-die percentile (×5):** {(per_die * 5):g}")
+                st.markdown(f"- **Per-die expected:** {(per_die):g}")
                 st.markdown(f"- **Dice count:** {expr.count}")
                 if expr.modifier:
-                    scaled = expr.modifier * 5
-                    st.markdown(f"- **Flat modifier:** {expr.modifier:+d} (×5 = {scaled:+d})")
+                    st.markdown(f"- **Flat modifier:** {expr.modifier:+d}")
 
         except ValueError as e:
             st.error(str(e))
@@ -95,13 +92,13 @@ if page == "Expected Value":
         with st.expander("Examples"):
             st.markdown(
                 """
-                | Notation | Expected (×5) |
-                |----------|--------------|
-                | `3d6`    | 52.5 |
-                | `2d6+6`  | 65.0 |
-                | `5d6`    | 87.5 |
-                | `1d20`   | 52.5 |
-                | `4d4-2`  | 40.0 |
+                | Notation | Expected |
+                |----------|----------|
+                | `3d6`    | 10.5 |
+                | `2d6+6`  | 13.0 |
+                | `5d6`    | 17.5 |
+                | `1d20`   | 10.5 |
+                | `4d4-2`  | 8.0 |
                 """
             )
 
