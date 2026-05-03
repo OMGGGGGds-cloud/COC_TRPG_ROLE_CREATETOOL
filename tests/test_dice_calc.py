@@ -451,10 +451,6 @@ class TestCompareRollVsBuy:
         with pytest.raises(ValueError):
             compare_roll_vs_buy(470, 1, "invalid_mode")
 
-    def test_mode_full_set_has_no_attributes(self):
-        result = compare_roll_vs_buy(470, 3, "full_set")
-        assert len(result.attributes) == 0
-
     def test_single_set_expected_in_full_mode(self):
         result = compare_roll_vs_buy(self._expected_total_raw, 3, "full_set")
         assert result.single_set_expected is not None

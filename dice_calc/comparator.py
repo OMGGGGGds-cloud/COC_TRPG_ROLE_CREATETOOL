@@ -11,7 +11,7 @@ All calculations use exact probability math (order statistics via convolutions
 of dice sum distributions). No random simulation.
 """
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Dict, List, Optional
 
 from dice_calc.parser import parse_notation
@@ -41,15 +41,6 @@ _SINGLE_SET_EXPECTED: float = sum(
 
 
 @dataclass
-class AttributeComparison:
-    """Results for a single attribute in the comparison."""
-
-    characteristic: CoCCharacteristic
-    expected_single: float
-    expected_best_of_k: float
-
-
-@dataclass
 class ComparisonResult:
     """Overall results of a roll vs. point-buy comparison."""
 
@@ -60,9 +51,6 @@ class ComparisonResult:
     # Overall summary
     expected_best_total: float
     point_buy_total: float
-
-    # Per-attribute breakdown
-    attributes: List[AttributeComparison] = field(default_factory=list)
 
     # Full-set distribution info (Mode A only)
     set_distribution: Optional[Dict[int, float]] = None

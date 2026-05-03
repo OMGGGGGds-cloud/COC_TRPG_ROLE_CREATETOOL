@@ -179,13 +179,10 @@ def expected_sum_of_top_k(dist: Dict[int, float], n: int, k: int) -> float:
             # P(X_(j) <= v) = sum_{i=order_j}^{n} C(n,i) * F(v)^i * (1-F(v))^(n-i)
             cdf_at_v = 0.0
 
-            # Optimization: if f_x == 0, then F(v)^i = 0 for all i > 0
-            # and (1-F(v))^(n-i) = 1^{n-i} = 1
+            # Optimization: f_x == 0 → F(v)^i = 0 for all i > 0,
+            # so cdf_at_v = 0 (order_j >= 1 always by construction).
             if f_x == 0.0:
-                if order_j == 0:
-                    cdf_at_v = 1.0
-                else:
-                    cdf_at_v = 0.0
+                cdf_at_v = 0.0
             elif f_x == 1.0:
                 # F(v) = 1 means all draws are <= v
                 cdf_at_v = 1.0
